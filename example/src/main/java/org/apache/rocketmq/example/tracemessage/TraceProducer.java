@@ -29,7 +29,7 @@ public class TraceProducer {
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroupName",true);
         producer.start();
 
-        for (int i = 0; i < 128; i++)
+        for (int i = 0; i < 128; i++) {
             try {
                 {
                     Message msg = new Message("TopicTest",
@@ -43,7 +43,7 @@ public class TraceProducer {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+        }
         producer.shutdown();
     }
 }

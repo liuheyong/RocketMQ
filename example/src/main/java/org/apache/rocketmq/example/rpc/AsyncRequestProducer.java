@@ -35,12 +35,10 @@ public class AsyncRequestProducer {
 
         DefaultMQProducer producer = new DefaultMQProducer(producerGroup);
         producer.start();
-
         try {
             Message msg = new Message(topic,
-                "",
-                "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
-
+                    "",
+                    "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
             long begin = System.currentTimeMillis();
             producer.request(msg, new RequestCallback() {
                 @Override
@@ -57,7 +55,7 @@ public class AsyncRequestProducer {
         } catch (Exception e) {
             log.warn("", e);
         }
-         /* shutdown after your request callback is finished */
-//        producer.shutdown();
+        /* shutdown after your request callback is finished */
+        //producer.shutdown();
     }
 }

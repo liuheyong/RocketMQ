@@ -16,10 +16,17 @@
  */
 package org.apache.rocketmq.client.producer;
 
-import java.util.List;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
 
+import java.util.List;
+
+/**
+ * 消息队列选择器
+ *
+ * @Author: heyongliu
+ * @date: 2021/5/17
+ */
 public interface MessageQueueSelector {
     MessageQueue select(final List<MessageQueue> mqs, final Message msg, final Object arg);
 }

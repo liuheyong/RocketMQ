@@ -34,20 +34,14 @@ public class SimplePushConsumer {
         messagingAccessPoint.startup();
         System.out.printf("MessagingAccessPoint startup OK%n");
 
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                consumer.shutdown();
-                messagingAccessPoint.shutdown();
-            }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            consumer.shutdown();
+            messagingAccessPoint.shutdown();
         }));
 
-        consumer.attachQueue("OMS_HELLO_TOPIC", new MessageListener() {
-            @Override
-            public void onReceived(Message message, Context context) {
-                System.out.printf("Received one message: %s%n", message.sysHeaders().getString(Message.BuiltinKeys.MESSAGE_ID));
-                context.ack();
-            }
+        consumer.attachQueue("OMS_HELLO_TOPIC", (message, context) -> {
+            System.out.printf("Received one message: %s%n", message.sysHeaders().getString(Message.BuiltinKeys.MESSAGE_ID));
+            context.ack();
         });
 
         consumer.startup();
