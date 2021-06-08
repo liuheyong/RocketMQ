@@ -21,10 +21,10 @@ import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 
 public class ProducerWithNamespace {
-    public static void main(String[] args) throws Exception {
 
+    public static void main(String[] args) throws Exception {
         DefaultMQProducer producer = new DefaultMQProducer("InstanceTest", "pidTest");
-        producer.setNamesrvAddr("127.0.0.1:9876");
+        producer.setNamesrvAddr("10.168.81.50:9876");
         producer.start();
         for (int i = 0; i < 100; i++) {
             Message message = new Message("topicTest", "tagTest", "Hello world".getBytes());
