@@ -237,12 +237,8 @@ public class ConsumeMessageConcurrentlyService implements ConsumeMessageService 
         }
     }
 
-
     private void cleanExpireMsg() {
-        Iterator<Map.Entry<MessageQueue, ProcessQueue>> it =
-            this.defaultMQPushConsumerImpl.getRebalanceImpl().getProcessQueueTable().entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<MessageQueue, ProcessQueue> next = it.next();
+        for (Map.Entry<MessageQueue, ProcessQueue> next : this.defaultMQPushConsumerImpl.getRebalanceImpl().getProcessQueueTable().entrySet()) {
             ProcessQueue pq = next.getValue();
             pq.cleanExpiredMsg(this.defaultMQPushConsumer);
         }
@@ -404,7 +400,7 @@ public class ConsumeMessageConcurrentlyService implements ConsumeMessageService 
             boolean hasException = false;
             ConsumeReturnType returnType = ConsumeReturnType.SUCCESS;
             try {
-                if (msgs != null && !msgs.isEmpty()) {
+                if (!msgs.isEmpty()) {
                     for (MessageExt msg : msgs) {
                         MessageAccessor.setConsumeStartTimeStamp(msg, String.valueOf(System.currentTimeMillis()));
                     }

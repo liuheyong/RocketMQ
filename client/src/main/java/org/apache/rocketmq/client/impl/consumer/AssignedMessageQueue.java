@@ -16,12 +16,13 @@
  */
 package org.apache.rocketmq.client.impl.consumer;
 
+import org.apache.rocketmq.common.message.MessageQueue;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import org.apache.rocketmq.common.message.MessageQueue;
 
 public class AssignedMessageQueue {
 
@@ -167,13 +168,7 @@ public class AssignedMessageQueue {
 
     public void removeAssignedMessageQueue(String topic) {
         synchronized (this.assignedMessageQueueState) {
-            Iterator<Map.Entry<MessageQueue, MessageQueueState>> it = this.assignedMessageQueueState.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<MessageQueue, MessageQueueState> next = it.next();
-                if (next.getKey().getTopic().equals(topic)) {
-                    it.remove();
-                }
-            }
+            this.assignedMessageQueueState.entrySet().removeIf(next -> next.getKey().getTopic().equals(topic));
         }
     }
 
@@ -181,7 +176,7 @@ public class AssignedMessageQueue {
         return this.assignedMessageQueueState.keySet();
     }
 
-    private class MessageQueueState {
+    private static class MessageQueueState {
         private MessageQueue messageQueue;
         private ProcessQueue processQueue;
         private volatile boolean paused = false;
