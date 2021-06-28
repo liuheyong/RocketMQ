@@ -88,7 +88,6 @@ public class ClientChannelInfo {
         } else if (this.channel != other.channel) {
             return false;
         }
-
         return true;
     }
 

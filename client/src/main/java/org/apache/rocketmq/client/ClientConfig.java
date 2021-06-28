@@ -16,10 +16,6 @@
  */
 package org.apache.rocketmq.client;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.common.UtilAll;
 import org.apache.rocketmq.common.message.MessageQueue;
@@ -29,24 +25,31 @@ import org.apache.rocketmq.remoting.common.RemotingUtil;
 import org.apache.rocketmq.remoting.netty.TlsSystemConfig;
 import org.apache.rocketmq.remoting.protocol.LanguageCode;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Client Common configuration
  */
 public class ClientConfig {
+
     public static final String SEND_MESSAGE_WITH_VIP_CHANNEL_PROPERTY = "com.rocketmq.sendMessageWithVIPChannel";
+    protected String namespace;
+    protected AccessChannel accessChannel = AccessChannel.LOCAL;
     private String namesrvAddr = NameServerAddressUtils.getNameServerAddresses();
     private String clientIP = RemotingUtil.getLocalAddress();
     private String instanceName = System.getProperty("rocketmq.client.name", "DEFAULT");
     private int clientCallbackExecutorThreads = Runtime.getRuntime().availableProcessors();
-    protected String namespace;
-    protected AccessChannel accessChannel = AccessChannel.LOCAL;
 
     /**
-     * Pulling topic information interval from the named server
+     * 默认情况下，消费者每隔30秒从nameserver获取所有topic的最新队列情况，这意味着某个broker如果宕机，客户端最多要30秒才能感知。
+     * 该时间由DefaultMQPushConsumer的pollNameServerInteval参数决定
      */
     private int pollNameServerInterval = 1000 * 30;
+
     /**
-     * Heartbeat interval in microseconds with message broker
+     * 默认情况下，消费者每隔30秒向所有broker发送心跳，该时间由DefaultMQPushConsumer的heartbeatBrokerInterval参数决定
      */
     private int heartbeatBrokerInterval = 1000 * 30;
     /**
@@ -133,9 +136,7 @@ public class ClientConfig {
         if (StringUtils.isEmpty(this.getNamespace())) {
             return queues;
         }
-        Iterator<MessageQueue> iter = queues.iterator();
-        while (iter.hasNext()) {
-            MessageQueue queue = iter.next();
+        for (MessageQueue queue : queues) {
             queue.setTopic(withNamespace(queue.getTopic()));
         }
         return queues;
@@ -298,13 +299,12 @@ public class ClientConfig {
         this.accessChannel = accessChannel;
     }
 
-
     @Override
     public String toString() {
         return "ClientConfig [namesrvAddr=" + namesrvAddr + ", clientIP=" + clientIP + ", instanceName=" + instanceName
-            + ", clientCallbackExecutorThreads=" + clientCallbackExecutorThreads + ", pollNameServerInterval=" + pollNameServerInterval
-            + ", heartbeatBrokerInterval=" + heartbeatBrokerInterval + ", persistConsumerOffsetInterval=" + persistConsumerOffsetInterval
-            + ", pullTimeDelayMillsWhenException=" + pullTimeDelayMillsWhenException + ", unitMode=" + unitMode + ", unitName=" + unitName + ", vipChannelEnabled="
-            + vipChannelEnabled + ", useTLS=" + useTLS + ", language=" + language.name() + ", namespace=" + namespace + "]";
+                + ", clientCallbackExecutorThreads=" + clientCallbackExecutorThreads + ", pollNameServerInterval=" + pollNameServerInterval
+                + ", heartbeatBrokerInterval=" + heartbeatBrokerInterval + ", persistConsumerOffsetInterval=" + persistConsumerOffsetInterval
+                + ", pullTimeDelayMillsWhenException=" + pullTimeDelayMillsWhenException + ", unitMode=" + unitMode + ", unitName=" + unitName + ", vipChannelEnabled="
+                + vipChannelEnabled + ", useTLS=" + useTLS + ", language=" + language.name() + ", namespace=" + namespace + "]";
     }
 }
