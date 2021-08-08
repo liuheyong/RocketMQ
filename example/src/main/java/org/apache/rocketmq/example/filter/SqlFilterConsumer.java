@@ -22,6 +22,12 @@ import org.apache.rocketmq.client.consumer.MessageSelector;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 
+/**
+ * 发送SQL过滤消息【可以自定义过滤字段】
+ *
+ * @Author: heyongliu
+ * @Date: 2021/8/7
+ */
 public class SqlFilterConsumer {
 
     public static void main(String[] args) throws Exception {

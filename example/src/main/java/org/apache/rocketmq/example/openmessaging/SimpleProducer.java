@@ -16,20 +16,17 @@
  */
 package org.apache.rocketmq.example.openmessaging;
 
-import io.openmessaging.Future;
-import io.openmessaging.FutureListener;
-import io.openmessaging.Message;
-import io.openmessaging.MessagingAccessPoint;
-import io.openmessaging.OMS;
+import io.openmessaging.*;
 import io.openmessaging.producer.Producer;
 import io.openmessaging.producer.SendResult;
+
 import java.nio.charset.Charset;
 import java.util.concurrent.CountDownLatch;
 
 public class SimpleProducer {
     public static void main(String[] args) {
         final MessagingAccessPoint messagingAccessPoint =
-            OMS.getMessagingAccessPoint("oms:rocketmq://localhost:9876/default:default");
+                OMS.getMessagingAccessPoint("oms:rocketmq://localhost:9876/default:default");
 
         final Producer producer = messagingAccessPoint.createProducer();
 

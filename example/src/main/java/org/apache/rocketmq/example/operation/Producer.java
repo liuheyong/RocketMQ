@@ -97,7 +97,6 @@ public class Producer {
             hf.printHelp("producer", options, true);
             return null;
         }
-
         return commandLine;
     }
 }

@@ -27,8 +27,14 @@ import org.apache.rocketmq.common.message.MessageExt;
 
 import java.util.List;
 
+/**
+ * 跟踪消息轨迹
+ *
+ * @Author: heyongliu
+ * @Date: 2021/8/7
+ */
 public class TracePushConsumer {
-    public static void main(String[] args) throws InterruptedException, MQClientException {
+    public static void main(String[] args) throws MQClientException {
         // Here,we use the default message track trace topic name
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_JODIE_1", true);
         consumer.subscribe("TopicTest", "*");
@@ -36,7 +42,6 @@ public class TracePushConsumer {
         // Wrong time format 2017_0422_221800
         consumer.setConsumeTimestamp("20181109221800");
         consumer.registerMessageListener(new MessageListenerConcurrently() {
-
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
                 System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);

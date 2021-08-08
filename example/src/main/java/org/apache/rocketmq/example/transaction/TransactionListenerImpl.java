@@ -24,10 +24,15 @@ import org.apache.rocketmq.common.message.MessageExt;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 发送事务消息
+ *
+ * @Author: heyongliu
+ * @Date: 2021/8/8
+ */
 public class TransactionListenerImpl implements TransactionListener {
 
     private AtomicInteger transactionIndex = new AtomicInteger(0);
-
     private ConcurrentHashMap<String, Integer> localTrans = new ConcurrentHashMap<>();
 
     @Override

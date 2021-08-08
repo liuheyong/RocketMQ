@@ -17,14 +17,6 @@
 
 package org.apache.rocketmq.example.benchmark;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -41,6 +33,14 @@ import org.apache.rocketmq.common.filter.ExpressionType;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.remoting.RPCHook;
 import org.apache.rocketmq.srvutil.ServerUtil;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Consumer {
 
@@ -67,7 +67,7 @@ public class Consumer {
         }
 
         System.out.printf("topic: %s, threadCount %d, group: %s, suffix: %s, filterType: %s, expression: %s, msgTraceEnable: %s, aclEnable: %s%n",
-            topic, threadCount, group, isSuffixEnable, filterType, expression, msgTraceEnable, aclEnable);
+                topic, threadCount, group, isSuffixEnable, filterType, expression, msgTraceEnable, aclEnable);
 
         final StatsBenchmarkConsumer statsBenchmarkConsumer = new StatsBenchmarkConsumer();
 
@@ -92,7 +92,7 @@ public class Consumer {
                     Long[] end = snapshotList.getLast();
 
                     final long consumeTps =
-                        (long) (((end[1] - begin[1]) / (double) (end[0] - begin[0])) * 1000L);
+                            (long) (((end[1] - begin[1]) / (double) (end[0] - begin[0])) * 1000L);
                     final double averageB2CRT = (end[2] - begin[2]) / (double) (end[1] - begin[1]);
                     final double averageS2CRT = (end[3] - begin[3]) / (double) (end[1] - begin[1]);
                     final long failCount = end[4] - begin[4];
@@ -147,7 +147,7 @@ public class Consumer {
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
-                ConsumeConcurrentlyContext context) {
+                                                            ConsumeConcurrentlyContext context) {
                 MessageExt msg = msgs.get(0);
                 long now = System.currentTimeMillis();
 
@@ -243,12 +243,12 @@ class StatsBenchmarkConsumer {
     private final AtomicLong failCount = new AtomicLong(0L);
 
     public Long[] createSnapshot() {
-        Long[] snap = new Long[] {
-            System.currentTimeMillis(),
-            this.receiveMessageTotalCount.get(),
-            this.born2ConsumerTotalRT.get(),
-            this.store2ConsumerTotalRT.get(),
-            this.failCount.get()
+        Long[] snap = new Long[]{
+                System.currentTimeMillis(),
+                this.receiveMessageTotalCount.get(),
+                this.born2ConsumerTotalRT.get(),
+                this.store2ConsumerTotalRT.get(),
+                this.failCount.get()
         };
 
         return snap;

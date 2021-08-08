@@ -17,12 +17,13 @@
 
 package org.apache.rocketmq.example.batch;
 
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.common.message.Message;
 
 public class SplitBatchProducer {
 
@@ -49,8 +50,8 @@ public class SplitBatchProducer {
 }
 
 class ListSplitter implements Iterator<List<Message>> {
-    private int sizeLimit = 1000 * 1000;
     private final List<Message> messages;
+    private int sizeLimit = 1000 * 1000;
     private int currIndex;
 
     public ListSplitter(List<Message> messages) {

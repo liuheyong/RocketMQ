@@ -59,7 +59,6 @@ public class PullConsumer {
                 }
             }
         }
-
         consumer.shutdown();
     }
 
@@ -67,7 +66,6 @@ public class PullConsumer {
         Long offset = OFFSE_TABLE.get(mq);
         if (offset != null)
             return offset;
-
         return 0;
     }
 

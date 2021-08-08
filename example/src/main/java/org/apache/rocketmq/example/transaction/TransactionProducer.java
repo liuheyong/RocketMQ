@@ -26,6 +26,12 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.*;
 
+/**
+ * 发送事务消息
+ *
+ * @Author: heyongliu
+ * @Date: 2021/8/8
+ */
 public class TransactionProducer {
     public static void main(String[] args) throws MQClientException, InterruptedException {
         TransactionListener transactionListener = new TransactionListenerImpl();
@@ -46,18 +52,15 @@ public class TransactionProducer {
         String[] tags = new String[]{"TagA", "TagB", "TagC", "TagD", "TagE"};
         for (int i = 0; i < 10; i++) {
             try {
-                Message msg =
-                        new Message("TopicTest1234", tags[i % tags.length], "KEY" + i,
-                                ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
+                Message msg = new Message("TopicTest1234", tags[i % tags.length], "KEY" + i,
+                        ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
                 SendResult sendResult = producer.sendMessageInTransaction(msg, null);
                 System.out.printf("%s%n", sendResult);
-
                 Thread.sleep(10);
             } catch (MQClientException | UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
-
         for (int i = 0; i < 100000; i++) {
             Thread.sleep(1000);
         }

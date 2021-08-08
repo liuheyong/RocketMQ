@@ -23,23 +23,26 @@ import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 
+/**
+ * 跟踪消息轨迹
+ *
+ * @Author: heyongliu
+ * @Date: 2021/8/7
+ */
 public class TraceProducer {
-    public static void main(String[] args) throws MQClientException, InterruptedException {
-
-        DefaultMQProducer producer = new DefaultMQProducer("ProducerGroupName",true);
+    public static void main(String[] args) throws MQClientException {
+        DefaultMQProducer producer = new DefaultMQProducer("ProducerGroupName", true);
         producer.start();
-
         for (int i = 0; i < 128; i++) {
             try {
                 {
                     Message msg = new Message("TopicTest",
-                        "TagA",
-                        "OrderID188",
-                        "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
+                            "TagA",
+                            "OrderID188",
+                            "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
                     SendResult sendResult = producer.send(msg);
                     System.out.printf("%s%n", sendResult);
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

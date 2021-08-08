@@ -26,7 +26,6 @@ public class PullConsumerTest {
         DefaultMQPullConsumer consumer = new DefaultMQPullConsumer("please_rename_unique_group_name_5");
         consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.start();
-
         try {
             MessageQueue mq = new MessageQueue();
             mq.setQueueId(0);
@@ -42,7 +41,6 @@ public class PullConsumerTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         consumer.shutdown();
     }
 }

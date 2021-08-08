@@ -38,11 +38,9 @@ public class Producer {
                     SendResult sendResult = producer.send(msg);
                     System.out.printf("%s%n", sendResult);
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         producer.shutdown();
     }
 }

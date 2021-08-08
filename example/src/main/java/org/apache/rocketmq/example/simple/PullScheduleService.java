@@ -38,11 +38,9 @@ public class PullScheduleService {
             public void doPullTask(MessageQueue mq, PullTaskContext context) {
                 MQPullConsumer consumer = context.getPullConsumer();
                 try {
-
                     long offset = consumer.fetchConsumeOffset(mq, false);
                     if (offset < 0)
                         offset = 0;
-
                     PullResult pullResult = consumer.pull(mq, "*", offset, 32);
                     System.out.printf("%s%n", offset + "\t" + mq + "\t" + pullResult);
                     switch (pullResult.getPullStatus()) {
@@ -64,7 +62,6 @@ public class PullScheduleService {
                 }
             }
         });
-
         scheduleService.start();
     }
 }

@@ -26,6 +26,7 @@ import org.apache.rocketmq.logging.InternalLogger;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 
 public class AsyncRequestProducer {
+
     private static final InternalLogger log = ClientLogger.getLog();
 
     public static void main(String[] args) throws MQClientException, InterruptedException {

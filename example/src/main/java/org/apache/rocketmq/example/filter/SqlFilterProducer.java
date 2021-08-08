@@ -22,6 +22,12 @@ import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 
+/**
+ * 发送SQL过滤消息【可以自定义过滤字段】
+ *
+ * @Author: heyongliu
+ * @Date: 2021/8/7
+ */
 public class SqlFilterProducer {
 
     public static void main(String[] args) throws Exception {
@@ -30,12 +36,12 @@ public class SqlFilterProducer {
 
         producer.start();
 
-        String[] tags = new String[] {"TagA", "TagB", "TagC"};
+        String[] tags = new String[]{"TagA", "TagB", "TagC"};
 
         for (int i = 0; i < 10; i++) {
             Message msg = new Message("SqlFilterTest",
-                tags[i % tags.length],
-                ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET)
+                    tags[i % tags.length],
+                    ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET)
             );
             msg.putUserProperty("a", String.valueOf(i));
 

@@ -16,15 +16,6 @@
  */
 package org.apache.rocketmq.example.benchmark;
 
-import java.io.UnsupportedEncodingException;
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -33,12 +24,21 @@ import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.log.ClientLogger;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.logging.InternalLogger;
 import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.logging.InternalLogger;
 import org.apache.rocketmq.remoting.RPCHook;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.apache.rocketmq.srvutil.ServerUtil;
+
+import java.io.UnsupportedEncodingException;
+import java.util.LinkedList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Producer {
 
@@ -60,7 +60,7 @@ public class Producer {
         final boolean aclEnable = commandLine.hasOption('a') && Boolean.parseBoolean(commandLine.getOptionValue('a'));
 
         System.out.printf("topic: %s threadCount: %d messageSize: %d keyEnable: %s propertySize: %d tagCount: %d traceEnable: %s aclEnable: %s%n",
-            topic, threadCount, messageSize, keyEnable, propertySize, tagCount, msgTraceEnable, aclEnable);
+                topic, threadCount, messageSize, keyEnable, propertySize, tagCount, msgTraceEnable, aclEnable);
 
         final InternalLogger log = ClientLogger.getLog();
 
@@ -92,7 +92,7 @@ public class Producer {
                     final double averageRT = (end[5] - begin[5]) / (double) (end[3] - begin[3]);
 
                     System.out.printf("Current Time: %s Send TPS: %d Max RT(ms): %d Average RT(ms): %7.3f Send Failed: %d Response Failed: %d%n",
-                        System.currentTimeMillis(), sendTps, statsBenchmark.getSendMessageMaxRT().get(), averageRT, end[2], end[4]);
+                            System.currentTimeMillis(), sendTps, statsBenchmark.getSendMessageMaxRT().get(), averageRT, end[2], end[4]);
                 }
             }
 
@@ -265,13 +265,13 @@ class StatsBenchmarkProducer {
     private final AtomicLong sendMessageMaxRT = new AtomicLong(0L);
 
     public Long[] createSnapshot() {
-        Long[] snap = new Long[] {
-            System.currentTimeMillis(),
-            this.sendRequestSuccessCount.get(),
-            this.sendRequestFailedCount.get(),
-            this.receiveResponseSuccessCount.get(),
-            this.receiveResponseFailedCount.get(),
-            this.sendMessageSuccessTimeTotal.get(),
+        Long[] snap = new Long[]{
+                System.currentTimeMillis(),
+                this.sendRequestSuccessCount.get(),
+                this.sendRequestFailedCount.get(),
+                this.receiveResponseSuccessCount.get(),
+                this.receiveResponseFailedCount.get(),
+                this.sendMessageSuccessTimeTotal.get(),
         };
 
         return snap;

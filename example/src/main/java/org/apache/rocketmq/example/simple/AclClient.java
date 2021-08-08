@@ -16,11 +16,6 @@
  */
 package org.apache.rocketmq.example.simple;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.rocketmq.acl.common.AclClientRPCHook;
 import org.apache.rocketmq.acl.common.SessionCredentials;
 import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
@@ -40,16 +35,18 @@ import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.RPCHook;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class AclClient {
 
-    private static final Map<MessageQueue, Long> OFFSE_TABLE = new HashMap<MessageQueue, Long>();
-
+    private static final Map<MessageQueue, Long> OFFSET_TABLE = new HashMap<>();
     private static final String ACL_ACCESS_KEY = "RocketMQ";
-
     private static final String ACL_SECRET_KEY = "1234567";
 
-    public static void main(String[] args) throws MQClientException, InterruptedException {
+    public static void main(String[] args) throws MQClientException {
         producer();
         pushConsumer();
         pullConsumer();
@@ -59,27 +56,23 @@ public class AclClient {
         DefaultMQProducer producer = new DefaultMQProducer("ProducerGroupName", getAclRPCHook());
         producer.setNamesrvAddr("127.0.0.1:9876");
         producer.start();
-
         for (int i = 0; i < 128; i++)
             try {
                 {
                     Message msg = new Message("TopicTest",
-                        "TagA",
-                        "OrderID188",
-                        "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
+                            "TagA",
+                            "OrderID188",
+                            "Hello world".getBytes(RemotingHelper.DEFAULT_CHARSET));
                     SendResult sendResult = producer.send(msg);
                     System.out.printf("%s%n", sendResult);
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         producer.shutdown();
     }
 
     public static void pushConsumer() throws MQClientException {
-
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("please_rename_unique_group_name_5", getAclRPCHook(), new AllocateMessageQueueAveragely());
         consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.subscribe("TopicTest", "*");
@@ -87,7 +80,6 @@ public class AclClient {
         // Wrong time format 2017_0422_221800
         consumer.setConsumeTimestamp("20180422221800");
         consumer.registerMessageListener(new MessageListenerConcurrently() {
-
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
                 System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);
@@ -103,7 +95,6 @@ public class AclClient {
         DefaultMQPullConsumer consumer = new DefaultMQPullConsumer("please_rename_unique_group_name_6", getAclRPCHook());
         consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.start();
-
         Set<MessageQueue> mqs = consumer.fetchSubscribeMessageQueues("TopicTest");
         for (MessageQueue mq : mqs) {
             System.out.printf("Consume from the queue: %s%n", mq);
@@ -111,7 +102,7 @@ public class AclClient {
             while (true) {
                 try {
                     PullResult pullResult =
-                        consumer.pullBlockIfNotFound(mq, null, getMessageQueueOffset(mq), 32);
+                            consumer.pullBlockIfNotFound(mq, null, getMessageQueueOffset(mq), 32);
                     System.out.printf("%s%n", pullResult);
                     putMessageQueueOffset(mq, pullResult.getNextBeginOffset());
                     printBody(pullResult);
@@ -132,7 +123,6 @@ public class AclClient {
                 }
             }
         }
-
         consumer.shutdown();
     }
 
@@ -151,18 +141,18 @@ public class AclClient {
     }
 
     private static long getMessageQueueOffset(MessageQueue mq) {
-        Long offset = OFFSE_TABLE.get(mq);
-        if (offset != null)
+        Long offset = OFFSET_TABLE.get(mq);
+        if (offset != null) {
             return offset;
-
+        }
         return 0;
     }
 
     private static void putMessageQueueOffset(MessageQueue mq, long offset) {
-        OFFSE_TABLE.put(mq, offset);
+        OFFSET_TABLE.put(mq, offset);
     }
 
     static RPCHook getAclRPCHook() {
-        return new AclClientRPCHook(new SessionCredentials(ACL_ACCESS_KEY,ACL_SECRET_KEY));
+        return new AclClientRPCHook(new SessionCredentials(ACL_ACCESS_KEY, ACL_SECRET_KEY));
     }
 }

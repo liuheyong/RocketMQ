@@ -16,8 +16,6 @@
  */
 package org.apache.rocketmq.example.ordermessage;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -26,6 +24,15 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+
+/**
+ * 发送顺序消息
+ *
+ * @Author: heyongliu
+ * @Date: 2021/8/7
+ */
 public class Consumer {
 
     public static void main(String[] args) throws MQClientException {
@@ -53,7 +60,6 @@ public class Consumer {
                     context.setSuspendCurrentQueueTimeMillis(3000);
                     return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
                 }
-
                 return ConsumeOrderlyStatus.SUCCESS;
             }
         });
@@ -61,5 +67,4 @@ public class Consumer {
         consumer.start();
         System.out.printf("Consumer Started.%n");
     }
-
 }
