@@ -16,12 +16,19 @@
  */
 package org.apache.rocketmq.client.producer.selector;
 
-import java.util.List;
-import java.util.Set;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
 
+import java.util.List;
+import java.util.Set;
+
+/**
+ * 根据机房选择器
+ *
+ * @Author: heyongliu
+ * @date: 2021/5/17
+ */
 public class SelectMessageQueueByMachineRoom implements MessageQueueSelector {
     private Set<String> consumeridcs;
 
