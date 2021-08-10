@@ -18,6 +18,7 @@
 package org.apache.rocketmq.store;
 
 /**
+ * 分发到index file、consumer queue ，bit map
  * Dispatcher of commit log.
  */
 public interface CommitLogDispatcher {
