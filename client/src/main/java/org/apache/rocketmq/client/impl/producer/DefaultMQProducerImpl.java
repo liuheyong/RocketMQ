@@ -76,7 +76,9 @@ public class DefaultMQProducerImpl implements MQProducerInner {
     private final Timer timer = new Timer("RequestHouseKeepingService", true);
     protected BlockingQueue<Runnable> checkRequestQueue;
     protected ExecutorService checkExecutor;
+    //服务状态枚举
     private ServiceState serviceState = ServiceState.CREATE_JUST;
+    //mq客户端实例
     private MQClientInstance mQClientFactory;
     private ArrayList<CheckForbiddenHook> checkForbiddenHookList = new ArrayList<CheckForbiddenHook>();
     private int zipCompressLevel = Integer.parseInt(System.getProperty(MixAll.MESSAGE_COMPRESS_LEVEL, "5"));
@@ -144,6 +146,7 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         this.start(true);
     }
 
+    // todo producer启动start
     public void start(final boolean startFactory) throws MQClientException {
         switch (this.serviceState) {
             case CREATE_JUST:
@@ -161,18 +164,17 @@ public class DefaultMQProducerImpl implements MQProducerInner {
                 if (!registerOK) {
                     this.serviceState = ServiceState.CREATE_JUST;
                     throw new MQClientException("The producer group[" + this.defaultMQProducer.getProducerGroup()
-                            + "] has been created before, specify another name please." + FAQUrl.suggestTodo(FAQUrl.GROUP_NAME_DUPLICATE_URL),
-                            null);
+                            + "] has been created before, specify another name please." + FAQUrl.suggestTodo(FAQUrl.GROUP_NAME_DUPLICATE_URL), null);
                 }
 
                 this.topicPublishInfoTable.put(this.defaultMQProducer.getCreateTopicKey(), new TopicPublishInfo());
 
                 if (startFactory) {
+                    //mq客户端实例启动
                     mQClientFactory.start();
                 }
 
-                log.info("the producer [{}] start OK. sendMessageWithVIPChannel={}", this.defaultMQProducer.getProducerGroup(),
-                        this.defaultMQProducer.isSendMessageWithVIPChannel());
+                log.info("the producer [{}] start OK. sendMessageWithVIPChannel={}", this.defaultMQProducer.getProducerGroup(), this.defaultMQProducer.isSendMessageWithVIPChannel());
                 this.serviceState = ServiceState.RUNNING;
                 break;
             case RUNNING:
@@ -180,8 +182,7 @@ public class DefaultMQProducerImpl implements MQProducerInner {
             case SHUTDOWN_ALREADY:
                 throw new MQClientException("The producer service state not OK, maybe started once, "
                         + this.serviceState
-                        + FAQUrl.suggestTodo(FAQUrl.CLIENT_SERVICE_NOT_OK),
-                        null);
+                        + FAQUrl.suggestTodo(FAQUrl.CLIENT_SERVICE_NOT_OK), null);
             default:
                 break;
         }
@@ -208,8 +209,7 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         }
 
         if (this.defaultMQProducer.getProducerGroup().equals(MixAll.DEFAULT_PRODUCER_GROUP)) {
-            throw new MQClientException("producerGroup can not equal " + MixAll.DEFAULT_PRODUCER_GROUP + ", please specify another one.",
-                    null);
+            throw new MQClientException("producerGroup can not equal " + MixAll.DEFAULT_PRODUCER_GROUP + ", please specify another one.", null);
         }
     }
 
@@ -244,7 +244,6 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         for (String key : this.topicPublishInfoTable.keySet()) {
             topicList.add(key);
         }
-
         return topicList;
     }
 
@@ -267,7 +266,6 @@ public class DefaultMQProducerImpl implements MQProducerInner {
             TransactionMQProducer producer = (TransactionMQProducer) defaultMQProducer;
             return producer.getTransactionCheckListener();
         }
-
         return null;
     }
 
@@ -1260,8 +1258,7 @@ public class DefaultMQProducerImpl implements MQProducerInner {
     /**
      * DEFAULT SYNC -------------------------------------------------------
      */
-    public SendResult send(
-            Message msg) throws MQClientException, RemotingException, MQBrokerException, InterruptedException {
+    public SendResult send(Message msg) throws MQClientException, RemotingException, MQBrokerException, InterruptedException {
         return send(msg, this.defaultMQProducer.getSendMsgTimeout());
     }
 
@@ -1314,13 +1311,11 @@ public class DefaultMQProducerImpl implements MQProducerInner {
         this.asyncSenderExecutor = asyncSenderExecutor;
     }
 
-    public SendResult send(Message msg,
-                           long timeout) throws MQClientException, RemotingException, MQBrokerException, InterruptedException {
+    public SendResult send(Message msg, long timeout) throws MQClientException, RemotingException, MQBrokerException, InterruptedException {
         return this.sendDefaultImpl(msg, CommunicationMode.SYNC, null, timeout);
     }
 
-    public Message request(Message msg,
-                           long timeout) throws RequestTimeoutException, MQClientException, RemotingException, MQBrokerException, InterruptedException {
+    public Message request(Message msg, long timeout) throws RequestTimeoutException, MQClientException, RemotingException, MQBrokerException, InterruptedException {
         long beginTimestamp = System.currentTimeMillis();
         prepareSendRequest(msg, timeout);
         final String correlationId = msg.getProperty(MessageConst.PROPERTY_CORRELATION_ID);

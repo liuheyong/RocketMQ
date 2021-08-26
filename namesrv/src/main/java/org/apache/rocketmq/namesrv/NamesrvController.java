@@ -132,6 +132,7 @@ public class NamesrvController {
         if (namesrvConfig.isClusterTest()) {
             this.remotingServer.registerDefaultProcessor(new ClusterTestRequestProcessor(this, namesrvConfig.getProductEnvName()), this.remotingExecutor);
         } else {
+            // todo DefaultRequestProcessor 用来处理netty client发送过来的请求request 根据request里面的code路由到不同的业务处理逻辑
             this.remotingServer.registerDefaultProcessor(new DefaultRequestProcessor(this), this.remotingExecutor);
         }
     }

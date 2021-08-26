@@ -18,19 +18,23 @@ package org.apache.rocketmq.common;
 
 public enum ServiceState {
     /**
+     * 服务刚刚创建，未启动
      * Service just created,not start
      */
     CREATE_JUST,
     /**
+     * 服务运行
      * Service Running
      */
     RUNNING,
     /**
+     * 服务启动失败
+     * Service Start failure
+     */
+    START_FAILED,
+    /**
+     * 服务关闭
      * Service shutdown
      */
     SHUTDOWN_ALREADY,
-    /**
-     * Service Start failure
-     */
-    START_FAILED;
 }

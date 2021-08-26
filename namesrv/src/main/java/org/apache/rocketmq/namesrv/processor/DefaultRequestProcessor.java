@@ -68,17 +68,10 @@ public class DefaultRequestProcessor extends AsyncNettyRequestProcessor implemen
     }
 
     @Override
-    public RemotingCommand processRequest(ChannelHandlerContext ctx,
-        RemotingCommand request) throws RemotingCommandException {
-
+    public RemotingCommand processRequest(ChannelHandlerContext ctx, RemotingCommand request) throws RemotingCommandException {
         if (ctx != null) {
-            log.debug("receive request, {} {} {}",
-                request.getCode(),
-                RemotingHelper.parseChannelRemoteAddr(ctx.channel()),
-                request);
+            log.debug("receive request, {} {} {}", request.getCode(), RemotingHelper.parseChannelRemoteAddr(ctx.channel()), request);
         }
-
-
         switch (request.getCode()) {
             case RequestCode.PUT_KV_CONFIG:
                 return this.putKVConfig(ctx, request);

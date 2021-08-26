@@ -18,6 +18,8 @@ package org.apache.rocketmq.common;
 
 import org.apache.rocketmq.common.constant.PermName;
 
+import java.util.Objects;
+
 public class TopicConfig {
     private static final String SEPARATOR = " ";
     public static int defaultReadQueueNums = 16;
@@ -55,7 +57,6 @@ public class TopicConfig {
         sb.append(this.perm);
         sb.append(SEPARATOR);
         sb.append(this.topicFilterType);
-
         return sb.toString();
     }
 
@@ -74,7 +75,6 @@ public class TopicConfig {
 
             return true;
         }
-
         return false;
     }
 
@@ -153,7 +153,7 @@ public class TopicConfig {
             return false;
         if (order != that.order)
             return false;
-        if (topicName != null ? !topicName.equals(that.topicName) : that.topicName != null)
+        if (!Objects.equals(topicName, that.topicName))
             return false;
         return topicFilterType == that.topicFilterType;
 
@@ -174,8 +174,8 @@ public class TopicConfig {
     @Override
     public String toString() {
         return "TopicConfig [topicName=" + topicName + ", readQueueNums=" + readQueueNums
-            + ", writeQueueNums=" + writeQueueNums + ", perm=" + PermName.perm2String(perm)
-            + ", topicFilterType=" + topicFilterType + ", topicSysFlag=" + topicSysFlag + ", order="
-            + order + "]";
+                + ", writeQueueNums=" + writeQueueNums + ", perm=" + PermName.perm2String(perm)
+                + ", topicFilterType=" + topicFilterType + ", topicSysFlag=" + topicSysFlag
+                + ", order=" + order + "]";
     }
 }

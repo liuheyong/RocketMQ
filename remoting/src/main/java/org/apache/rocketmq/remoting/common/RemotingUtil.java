@@ -19,20 +19,17 @@ package org.apache.rocketmq.remoting.common;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import org.apache.rocketmq.logging.InternalLogger;
+import org.apache.rocketmq.logging.InternalLoggerFactory;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
-import java.net.SocketAddress;
+import java.net.*;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import org.apache.rocketmq.logging.InternalLogger;
-import org.apache.rocketmq.logging.InternalLoggerFactory;
 
 public class RemotingUtil {
     public static final String OS_NAME = System.getProperty("os.name");
@@ -82,7 +79,6 @@ public class RemotingUtil {
         if (result == null) {
             result = Selector.open();
         }
-
         return result;
     }
 
@@ -117,10 +113,8 @@ public class RemotingUtil {
                     if (ip.startsWith("127.0") || ip.startsWith("192.168")) {
                         continue;
                     }
-
                     return ip;
                 }
-
                 return ipv4Result.get(ipv4Result.size() - 1);
             } else if (!ipv6Result.isEmpty()) {
                 return ipv6Result.get(0);
@@ -131,7 +125,6 @@ public class RemotingUtil {
         } catch (Exception e) {
             log.error("Failed to obtain local address", e);
         }
-
         return null;
     }
 
@@ -185,7 +178,6 @@ public class RemotingUtil {
                 }
             }
         }
-
         return null;
     }
 
@@ -195,9 +187,8 @@ public class RemotingUtil {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
                 log.info("closeChannel: close the connection to remote address[{}] result: {}", addrRemote,
-                    future.isSuccess());
+                        future.isSuccess());
             }
         });
     }
-
 }

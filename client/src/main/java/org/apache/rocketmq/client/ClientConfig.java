@@ -39,6 +39,7 @@ public class ClientConfig {
     protected AccessChannel accessChannel = AccessChannel.LOCAL;
     private String namesrvAddr = NameServerAddressUtils.getNameServerAddresses();
     private String clientIP = RemotingUtil.getLocalAddress();
+    //客户端实例名称
     private String instanceName = System.getProperty("rocketmq.client.name", "DEFAULT");
     private int clientCallbackExecutorThreads = Runtime.getRuntime().availableProcessors();
 
@@ -96,6 +97,7 @@ public class ClientConfig {
     }
 
     public void changeInstanceNameToPID() {
+        //如果未设置客户端实例名称，则客户端实例名称为pid
         if (this.instanceName.equals("DEFAULT")) {
             this.instanceName = String.valueOf(UtilAll.getPid());
         }

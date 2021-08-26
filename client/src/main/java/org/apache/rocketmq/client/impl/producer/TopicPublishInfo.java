@@ -84,6 +84,7 @@ public class TopicPublishInfo {
         }
     }
 
+    //轮训方式选择messageQueue
     public MessageQueue selectOneMessageQueue() {
         int index = this.sendWhichQueue.getAndIncrement();
         int pos = Math.abs(index) % this.messageQueueList.size();

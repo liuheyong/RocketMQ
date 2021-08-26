@@ -16,33 +16,20 @@
  */
 package org.apache.rocketmq.common;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.atomic.AtomicLong;
 import org.apache.rocketmq.common.annotation.ImportantField;
 import org.apache.rocketmq.common.constant.LoggerName;
 import org.apache.rocketmq.common.help.FAQUrl;
 import org.apache.rocketmq.logging.InternalLogger;
 import org.apache.rocketmq.logging.InternalLoggerFactory;
+
+import java.io.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class MixAll {
     public static final String ROCKETMQ_HOME_ENV = "ROCKETMQ_HOME";
@@ -131,7 +118,6 @@ public class MixAll {
                 return 0;
             }
         }
-
         return 0;
     }
 
@@ -220,7 +206,6 @@ public class MixAll {
                 }
             }
         }
-
         return null;
     }
 
@@ -228,8 +213,7 @@ public class MixAll {
         printObjectProperties(logger, object, false);
     }
 
-    public static void printObjectProperties(final InternalLogger logger, final Object object,
-        final boolean onlyImportantField) {
+    public static void printObjectProperties(final InternalLogger logger, final Object object, final boolean onlyImportantField) {
         Field[] fields = object.getClass().getDeclaredFields();
         for (Field field : fields) {
             if (!Modifier.isStatic(field.getModifiers())) {
@@ -281,7 +265,6 @@ public class MixAll {
             log.error("Failed to handle properties", e);
             return null;
         }
-
         return properties;
     }
 
@@ -307,7 +290,6 @@ public class MixAll {
                 }
             }
         }
-
         return properties;
     }
 
@@ -369,7 +351,6 @@ public class MixAll {
         } catch (SocketException e) {
             throw new RuntimeException("get local inet address fail", e);
         }
-
         return inetAddressList;
     }
 
@@ -384,7 +365,6 @@ public class MixAll {
 
             } catch (Exception ignored) {
             }
-
             throw new RuntimeException("InetAddress java.net.InetAddress.getLocalHost() throws UnknownHostException" + FAQUrl.suggestTodo(FAQUrl.UNKNOWN_HOST_EXCEPTION), e);
         }
     }
@@ -430,17 +410,14 @@ public class MixAll {
 
             prev = target.get();
         }
-
         return false;
     }
 
     public static String humanReadableByteCount(long bytes, boolean si) {
         int unit = si ? 1000 : 1024;
-        if (bytes < unit)
-            return bytes + " B";
+        if (bytes < unit) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
         String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
-
 }
