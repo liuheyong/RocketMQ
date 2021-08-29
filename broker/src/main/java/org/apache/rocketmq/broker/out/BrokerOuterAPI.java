@@ -54,8 +54,13 @@ public class BrokerOuterAPI {
     private String nameSrvAddr = null;
 
     // TODO 每隔30秒（此时间无法更改）向所有nameServer发送心跳，心跳包含了自身的topic配置信息。
-    private BrokerFixedThreadPoolExecutor brokerOuterExecutor = new BrokerFixedThreadPoolExecutor(4, 10, 1, TimeUnit.MINUTES,
-            new ArrayBlockingQueue<Runnable>(32), new ThreadFactoryImpl("brokerOutApi_thread_", true));
+    private BrokerFixedThreadPoolExecutor brokerOuterExecutor = new BrokerFixedThreadPoolExecutor(
+            4,
+            10,
+            1,
+            TimeUnit.MINUTES,
+            new ArrayBlockingQueue<>(32),
+            new ThreadFactoryImpl("brokerOutApi_thread_", true));
 
     public BrokerOuterAPI(final NettyClientConfig nettyClientConfig) {
         this(nettyClientConfig, null);

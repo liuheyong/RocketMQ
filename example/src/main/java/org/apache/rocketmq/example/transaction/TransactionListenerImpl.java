@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 发送事务消息
+ * 事务消息执行本地事务和回查本地事务
  *
  * @Author: heyongliu
  * @Date: 2021/8/8
@@ -40,7 +40,7 @@ public class TransactionListenerImpl implements TransactionListener {
         int value = transactionIndex.getAndIncrement();
         int status = value % 3;
         localTrans.put(msg.getTransactionId(), status);
-        return LocalTransactionState.UNKNOWN;
+        return LocalTransactionState.COMMIT_MESSAGE;
     }
 
     @Override

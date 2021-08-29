@@ -116,6 +116,7 @@ public class BrokerController {
     private MessageStore messageStore;
     //netty server
     private RemotingServer remotingServer;
+    //netty server
     private RemotingServer fastRemotingServer;
     private TopicConfigManager topicConfigManager;
     private ExecutorService sendMessageExecutor;
@@ -134,6 +135,7 @@ public class BrokerController {
     private Configuration configuration;
     private FileWatchService fileWatchService;
     private TransactionalMessageCheckService transactionalMessageCheckService;
+    //控制事务消息
     private TransactionalMessageService transactionalMessageService;
     private AbstractTransactionalMessageCheckListener transactionalMessageCheckListener;
     private Future<?> slaveSyncFuture;
@@ -582,7 +584,7 @@ public class BrokerController {
         this.fastRemotingServer.registerProcessor(RequestCode.QUERY_CONSUMER_OFFSET, consumerManageProcessor, this.consumerManageExecutor);
 
         /**
-         * EndTransactionProcessor
+         *  // todo 注册处理事务消息的处理器 EndTransactionProcessor
          */
         this.remotingServer.registerProcessor(RequestCode.END_TRANSACTION, new EndTransactionProcessor(this), this.endTransactionExecutor);
         this.fastRemotingServer.registerProcessor(RequestCode.END_TRANSACTION, new EndTransactionProcessor(this), this.endTransactionExecutor);
