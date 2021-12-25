@@ -28,38 +28,12 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 public class Producer1 {
     public static void main(String[] args) throws MQClientException, InterruptedException {
 
-        /*
-         * Instantiate with a producer group name.
-         */
-        DefaultMQProducer producer = new DefaultMQProducer("lhy_group_name_producer");
-        /*
-         * Specify name server addresses.
-         * <p/>
-         *
-         * Alternatively, you may specify name server addresses via exporting environmental variable: NAMESRV_ADDR
-         * <pre>
-         * {@code
-         * producer.setNamesrvAddr("name-server1-ip:9876;name-server2-ip:9876");
-         * }
-         * </pre>
-         */
+        DefaultMQProducer producer = new DefaultMQProducer("lhy_producer_group_name");
         producer.setNamesrvAddr("127.0.0.1:9876");
-        /*
-         * Launch the instance.
-         */
         producer.start();
         for (int i = 0; i < 100; i++) {
             try {
-                /*
-                 * Create a message instance, specifying topic, tag and message body.
-                 */
-                Message msg = new Message("TopicTest" /* Topic */,
-                        "TagA" /* Tag */,
-                        ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET) /* Message body */
-                );
-                /*
-                 * Call send message to deliver message to one of brokers.
-                 */
+                Message msg = new Message("TopicTest", "TagA", ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
                 SendResult sendResult = producer.send(msg);
                 System.out.printf("%s%n", sendResult);
             } catch (Exception e) {
@@ -67,9 +41,6 @@ public class Producer1 {
                 Thread.sleep(1000);
             }
         }
-        /*
-         * Shut down once the producer instance is not longer in use.
-         */
         producer.shutdown();
     }
 }

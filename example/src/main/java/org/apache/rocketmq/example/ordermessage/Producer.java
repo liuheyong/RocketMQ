@@ -37,6 +37,7 @@ import java.util.List;
  * @Date: 2021/8/7
  */
 public class Producer {
+
     public static void main(String[] args) throws UnsupportedEncodingException {
         try {
             MQProducer producer = new DefaultMQProducer("please_rename_unique_group_name");
