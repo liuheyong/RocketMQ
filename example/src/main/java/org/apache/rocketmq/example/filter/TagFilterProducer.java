@@ -44,7 +44,6 @@ public class TagFilterProducer {
             SendResult sendResult = producer.send(msg);
             System.out.printf("%s%n", sendResult);
         }
-
         producer.shutdown();
     }
 }

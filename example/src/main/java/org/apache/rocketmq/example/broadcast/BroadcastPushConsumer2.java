@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.rocketmq.example.quickstart;
+package org.apache.rocketmq.example.broadcast;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -23,18 +23,23 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
 import java.util.List;
 
 /**
- * This example shows how to subscribe and consume messages using providing {@link DefaultMQPushConsumer}.
+ * 广播消息
+ *
+ * @Author: heyongliu
+ * @Date: 2021/8/7
  */
-public class Consumer4 {
+public class BroadcastPushConsumer2 {
 
     public static void main(String[] args) throws MQClientException {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("lhy_consumer_group_name");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("lhy_broadcast_consumer_group_name");
         consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+        consumer.setMessageModel(MessageModel.BROADCASTING);
         consumer.subscribe("TopicTest", "*");
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
@@ -44,6 +49,6 @@ public class Consumer4 {
             }
         });
         consumer.start();
-        System.out.printf("Consumer Started.%n");
+        System.out.printf("Broadcast Consumer Started.%n");
     }
 }

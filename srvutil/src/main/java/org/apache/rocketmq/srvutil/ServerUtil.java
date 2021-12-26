@@ -16,13 +16,9 @@
  */
 package org.apache.rocketmq.srvutil;
 
+import org.apache.commons.cli.*;
+
 import java.util.Properties;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 
 public class ServerUtil {
 
@@ -31,17 +27,13 @@ public class ServerUtil {
         opt.setRequired(false);
         options.addOption(opt);
 
-        opt =
-            new Option("n", "namesrvAddr", true,
-                "Name server address list, eg: 192.168.0.1:9876;192.168.0.2:9876");
+        opt = new Option("n", "namesrvAddr", true, "Name server address list, eg: 192.168.0.1:9876;192.168.0.2:9876");
         opt.setRequired(false);
         options.addOption(opt);
-
         return options;
     }
 
-    public static CommandLine parseCmdLine(final String appName, String[] args, Options options,
-        CommandLineParser parser) {
+    public static CommandLine parseCmdLine(final String appName, String[] args, Options options, CommandLineParser parser) {
         HelpFormatter hf = new HelpFormatter();
         hf.setWidth(110);
         CommandLine commandLine = null;
@@ -55,7 +47,6 @@ public class ServerUtil {
             hf.printHelp(appName, options, true);
             System.exit(1);
         }
-
         return commandLine;
     }
 
@@ -78,8 +69,6 @@ public class ServerUtil {
                 }
             }
         }
-
         return properties;
     }
-
 }

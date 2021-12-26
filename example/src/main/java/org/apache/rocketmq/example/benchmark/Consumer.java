@@ -66,14 +66,13 @@ public class Consumer {
             group = groupPrefix + "_" + (System.currentTimeMillis() % 100);
         }
 
-        System.out.printf("topic: %s, threadCount %d, group: %s, suffix: %s, filterType: %s, expression: %s, msgTraceEnable: %s, aclEnable: %s%n",
-                topic, threadCount, group, isSuffixEnable, filterType, expression, msgTraceEnable, aclEnable);
+        System.out.printf("topic: %s, threadCount %d, group: %s, suffix: %s, filterType: %s, expression: %s, msgTraceEnable: %s, aclEnable: %s%n", topic, threadCount, group, isSuffixEnable, filterType, expression, msgTraceEnable, aclEnable);
 
         final StatsBenchmarkConsumer statsBenchmarkConsumer = new StatsBenchmarkConsumer();
 
         final Timer timer = new Timer("BenchmarkTimerThread", true);
 
-        final LinkedList<Long[]> snapshotList = new LinkedList<Long[]>();
+        final LinkedList<Long[]> snapshotList = new LinkedList<>();
 
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -91,8 +90,7 @@ public class Consumer {
                     Long[] begin = snapshotList.getFirst();
                     Long[] end = snapshotList.getLast();
 
-                    final long consumeTps =
-                            (long) (((end[1] - begin[1]) / (double) (end[0] - begin[0])) * 1000L);
+                    final long consumeTps = (long) (((end[1] - begin[1]) / (double) (end[0] - begin[0])) * 1000L);
                     final double averageB2CRT = (end[2] - begin[2]) / (double) (end[1] - begin[1]);
                     final double averageS2CRT = (end[3] - begin[3]) / (double) (end[1] - begin[1]);
                     final long failCount = end[4] - begin[4];
@@ -171,9 +169,7 @@ public class Consumer {
                 }
             }
         });
-
         consumer.start();
-
         System.out.printf("Consumer Started.%n");
     }
 
@@ -213,7 +209,6 @@ public class Consumer {
         opt = new Option("a", "aclEnable", true, "Acl Enable, Default: false");
         opt.setRequired(false);
         options.addOption(opt);
-
         return options;
     }
 
@@ -223,7 +218,6 @@ public class Consumer {
             boolean updated = target.compareAndSet(prev, value);
             if (updated)
                 break;
-
             prev = target.get();
         }
     }
@@ -243,15 +237,13 @@ class StatsBenchmarkConsumer {
     private final AtomicLong failCount = new AtomicLong(0L);
 
     public Long[] createSnapshot() {
-        Long[] snap = new Long[]{
+        return new Long[]{
                 System.currentTimeMillis(),
                 this.receiveMessageTotalCount.get(),
                 this.born2ConsumerTotalRT.get(),
                 this.store2ConsumerTotalRT.get(),
                 this.failCount.get()
         };
-
-        return snap;
     }
 
     public AtomicLong getReceiveMessageTotalCount() {

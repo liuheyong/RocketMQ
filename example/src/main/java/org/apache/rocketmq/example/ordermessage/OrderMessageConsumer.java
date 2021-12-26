@@ -33,15 +33,13 @@ import java.util.concurrent.atomic.AtomicLong;
  * @Author: heyongliu
  * @Date: 2021/8/7
  */
-public class Consumer {
+public class OrderMessageConsumer {
 
     public static void main(String[] args) throws MQClientException {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("please_rename_unique_group_name_3");
-
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("lhy_order_message_consumer_group_name");
+        consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-
-        consumer.subscribe("TopicTest", "TagA || TagC || TagD");
-
+        consumer.subscribe("orderMessageTopicTest", "TagA || TagC || TagD");
         consumer.registerMessageListener(new MessageListenerOrderly() {
             AtomicLong consumeTimes = new AtomicLong(0);
 
@@ -63,7 +61,6 @@ public class Consumer {
                 return ConsumeOrderlyStatus.SUCCESS;
             }
         });
-
         consumer.start();
         System.out.printf("Consumer Started.%n");
     }

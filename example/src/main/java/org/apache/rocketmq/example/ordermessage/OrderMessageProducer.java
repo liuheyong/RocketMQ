@@ -19,7 +19,6 @@ package org.apache.rocketmq.example.ordermessage;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.MQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
@@ -36,19 +35,17 @@ import java.util.List;
  * @Author: heyongliu
  * @Date: 2021/8/7
  */
-public class Producer {
+public class OrderMessageProducer {
 
     public static void main(String[] args) throws UnsupportedEncodingException {
         try {
-            MQProducer producer = new DefaultMQProducer("please_rename_unique_group_name");
+            DefaultMQProducer producer = new DefaultMQProducer("lhy_order_message_producer_group_name");
+            producer.setNamesrvAddr("127.0.0.1:9876");
             producer.start();
-
             String[] tags = new String[]{"TagA", "TagB", "TagC", "TagD", "TagE"};
             for (int i = 0; i < 100; i++) {
                 int orderId = i % 10;
-                Message msg =
-                        new Message("TopicTestjjj", tags[i % tags.length], "KEY" + i,
-                                ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
+                Message msg = new Message("orderMessageTopicTest", tags[i % tags.length], "KEY" + i, ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
                 SendResult sendResult = producer.send(msg, new MessageQueueSelector() {
                     @Override
                     public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {

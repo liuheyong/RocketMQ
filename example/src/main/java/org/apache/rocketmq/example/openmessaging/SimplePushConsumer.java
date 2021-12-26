@@ -42,7 +42,6 @@ public class SimplePushConsumer {
             System.out.printf("Received one message: %s%n", message.sysHeaders().getString(Message.BuiltinKeys.MESSAGE_ID));
             context.ack();
         });
-
         consumer.startup();
         System.out.printf("Consumer startup OK%n");
     }

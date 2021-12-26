@@ -69,7 +69,6 @@ public class SimpleProducer {
             Thread.sleep(500); // Wait some time for one-way delivery.
         } catch (InterruptedException ignore) {
         }
-
         producer.shutdown();
     }
 }

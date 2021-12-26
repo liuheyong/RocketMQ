@@ -16,16 +16,16 @@
  */
 package org.apache.rocketmq.example.namespace;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
 import org.apache.rocketmq.client.consumer.PullResult;
 import org.apache.rocketmq.common.message.MessageQueue;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class PullConsumerWithNamespace {
-    private static final Map<MessageQueue, Long> OFFSE_TABLE = new HashMap<MessageQueue, Long>();
+    private static final Map<MessageQueue, Long> OFFSE_TABLE = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
         DefaultMQPullConsumer pullConsumer = new DefaultMQPullConsumer("InstanceTest", "cidTest");
@@ -38,8 +38,7 @@ public class PullConsumerWithNamespace {
             SINGLE_MQ:
             while (true) {
                 try {
-                    PullResult pullResult =
-                        pullConsumer.pullBlockIfNotFound(mq, null, getMessageQueueOffset(mq), 32);
+                    PullResult pullResult = pullConsumer.pullBlockIfNotFound(mq, null, getMessageQueueOffset(mq), 32);
                     System.out.printf("%s%n", pullResult);
 
                     putMessageQueueOffset(mq, pullResult.getNextBeginOffset());
@@ -61,7 +60,6 @@ public class PullConsumerWithNamespace {
                 }
             }
         }
-
         pullConsumer.shutdown();
     }
 
@@ -70,7 +68,6 @@ public class PullConsumerWithNamespace {
         if (offset != null) {
             return offset;
         }
-
         return 0;
     }
 
@@ -78,8 +75,7 @@ public class PullConsumerWithNamespace {
         if (null == pullResult || pullResult.getMsgFoundList().isEmpty()) {
             return;
         }
-        pullResult.getMsgFoundList().stream().forEach(
-            (msg) -> System.out.printf("Topic is:%s, msgId is:%s%n" , msg.getTopic(), msg.getMsgId()));
+        pullResult.getMsgFoundList().forEach((msg) -> System.out.printf("Topic is:%s, msgId is:%s%n", msg.getTopic(), msg.getMsgId()));
     }
 
     private static void putMessageQueueOffset(MessageQueue mq, long offset) {

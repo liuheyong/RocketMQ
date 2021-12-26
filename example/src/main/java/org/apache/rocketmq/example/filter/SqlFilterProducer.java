@@ -48,7 +48,6 @@ public class SqlFilterProducer {
             SendResult sendResult = producer.send(msg);
             System.out.printf("%s%n", sendResult);
         }
-
         producer.shutdown();
     }
 }

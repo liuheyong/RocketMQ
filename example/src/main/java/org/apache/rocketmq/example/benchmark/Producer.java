@@ -42,8 +42,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Producer {
 
-    public static void main(String[] args) throws MQClientException, UnsupportedEncodingException {
-
+    public static void main(String[] args) throws MQClientException {
         Options options = ServerUtil.buildCommandlineOptions(new Options());
         CommandLine commandLine = ServerUtil.parseCmdLine("benchmarkProducer", args, buildCommandlineOptions(options), new PosixParser());
         if (null == commandLine) {
@@ -59,8 +58,7 @@ public class Producer {
         final boolean msgTraceEnable = commandLine.hasOption('m') && Boolean.parseBoolean(commandLine.getOptionValue('m'));
         final boolean aclEnable = commandLine.hasOption('a') && Boolean.parseBoolean(commandLine.getOptionValue('a'));
 
-        System.out.printf("topic: %s threadCount: %d messageSize: %d keyEnable: %s propertySize: %d tagCount: %d traceEnable: %s aclEnable: %s%n",
-                topic, threadCount, messageSize, keyEnable, propertySize, tagCount, msgTraceEnable, aclEnable);
+        System.out.printf("topic: %s threadCount: %d messageSize: %d keyEnable: %s propertySize: %d tagCount: %d traceEnable: %s aclEnable: %s%n", topic, threadCount, messageSize, keyEnable, propertySize, tagCount, msgTraceEnable, aclEnable);
 
         final InternalLogger log = ClientLogger.getLog();
 
@@ -185,7 +183,7 @@ public class Producer {
                             statsBenchmark.getSendRequestFailedCount().incrementAndGet();
                             try {
                                 Thread.sleep(3000);
-                            } catch (InterruptedException e1) {
+                            } catch (InterruptedException ignored) {
                             }
                         } catch (MQClientException e) {
                             statsBenchmark.getSendRequestFailedCount().incrementAndGet();
@@ -232,7 +230,6 @@ public class Producer {
         opt = new Option("a", "aclEnable", true, "Acl Enable, Default: false");
         opt.setRequired(false);
         options.addOption(opt);
-
         return options;
     }
 
@@ -246,7 +243,6 @@ public class Producer {
         }
 
         msg.setBody(sb.toString().getBytes(RemotingHelper.DEFAULT_CHARSET));
-
         return msg;
     }
 }
@@ -265,7 +261,8 @@ class StatsBenchmarkProducer {
     private final AtomicLong sendMessageMaxRT = new AtomicLong(0L);
 
     public Long[] createSnapshot() {
-        Long[] snap = new Long[]{
+
+        return new Long[]{
                 System.currentTimeMillis(),
                 this.sendRequestSuccessCount.get(),
                 this.sendRequestFailedCount.get(),
@@ -273,8 +270,6 @@ class StatsBenchmarkProducer {
                 this.receiveResponseFailedCount.get(),
                 this.sendMessageSuccessTimeTotal.get(),
         };
-
-        return snap;
     }
 
     public AtomicLong getSendRequestSuccessCount() {

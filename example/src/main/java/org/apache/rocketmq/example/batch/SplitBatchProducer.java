@@ -30,15 +30,14 @@ public class SplitBatchProducer {
     public static void main(String[] args) throws Exception {
 
         DefaultMQProducer producer = new DefaultMQProducer("BatchProducerGroupName");
+        producer.setNamesrvAddr("127.0.0.1:9876");
         producer.start();
-
         //large batch
         String topic = "BatchTest";
         List<Message> messages = new ArrayList<>(100 * 1000);
         for (int i = 0; i < 100 * 1000; i++) {
             messages.add(new Message(topic, "Tag", "OrderID" + i, ("Hello world " + i).getBytes()));
         }
-
         //split the large batch into small ones:
         ListSplitter splitter = new ListSplitter(messages);
         while (splitter.hasNext()) {
@@ -46,12 +45,10 @@ public class SplitBatchProducer {
             producer.send(listItem);
         }
     }
-
 }
 
 class ListSplitter implements Iterator<List<Message>> {
     private final List<Message> messages;
-    private int sizeLimit = 1000 * 1000;
     private int currIndex;
 
     public ListSplitter(List<Message> messages) {
@@ -75,6 +72,7 @@ class ListSplitter implements Iterator<List<Message>> {
                 tmpSize += entry.getKey().length() + entry.getValue().length();
             }
             tmpSize = tmpSize + 20; //for log overhead
+            int sizeLimit = 1000 * 1000;
             if (tmpSize > sizeLimit) {
                 //it is unexpected that single message exceeds the sizeLimit
                 //here just let it go, otherwise it will block the splitting process
@@ -89,7 +87,6 @@ class ListSplitter implements Iterator<List<Message>> {
             } else {
                 totalSize += tmpSize;
             }
-
         }
         List<Message> subList = messages.subList(currIndex, nextIndex);
         currIndex = nextIndex;

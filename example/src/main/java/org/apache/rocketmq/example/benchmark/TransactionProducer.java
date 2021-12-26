@@ -28,7 +28,6 @@ import org.apache.rocketmq.common.message.MessageConst;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.srvutil.ServerUtil;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -43,7 +42,7 @@ public class TransactionProducer {
     private static final long START_TIME = System.currentTimeMillis();
     private static final AtomicLong MSG_COUNT = new AtomicLong(0);
 
-    public static void main(String[] args) throws MQClientException, UnsupportedEncodingException {
+    public static void main(String[] args) throws MQClientException {
         Options options = ServerUtil.buildCommandlineOptions(new Options());
         CommandLine commandLine = ServerUtil.parseCmdLine("TransactionProducer", args, buildCommandlineOptions(options), new PosixParser());
         TxSendConfig config = new TxSendConfig();
@@ -111,8 +110,7 @@ public class TransactionProducer {
         }, 10000, 10000);
 
         final TransactionListener transactionCheckListener = new TransactionListenerImpl(statsBenchmark, config);
-        final TransactionMQProducer producer =
-                new TransactionMQProducer("benchmark_transaction_producer", config.aclEnable ? AclClient.getAclRPCHook() : null);
+        final TransactionMQProducer producer = new TransactionMQProducer("benchmark_transaction_producer", config.aclEnable ? AclClient.getAclRPCHook() : null);
         producer.setInstanceName(Long.toString(System.currentTimeMillis()));
         producer.setTransactionListener(transactionCheckListener);
         producer.setDefaultTopicQueueNums(1000);
@@ -144,7 +142,6 @@ public class TransactionProducer {
                                         .compareAndSet(prevMaxRT, currentRT);
                                 if (updated)
                                     break;
-
                                 prevMaxRT = statsBenchmark.getSendMessageMaxRT().get();
                             }
                             if (success) {
@@ -155,7 +152,7 @@ public class TransactionProducer {
                             if (config.sendInterval > 0) {
                                 try {
                                     Thread.sleep(config.sendInterval);
-                                } catch (InterruptedException e) {
+                                } catch (InterruptedException ignored) {
                                 }
                             }
                         }
@@ -195,10 +192,8 @@ public class TransactionProducer {
                 buf.put((byte) LocalTransactionState.COMMIT_MESSAGE.ordinal());
             }
         }
-
         Message msg = new Message();
         msg.setTopic(config.topic);
-
         msg.setBody(bs);
         return msg;
     }
@@ -333,7 +328,7 @@ class TransactionListenerImpl implements TransactionListener {
         return msgMeta.checkResult.get(times - 1);
     }
 
-    private class MsgMeta {
+    private static class MsgMeta {
         long batchId;
         long msgId;
         LocalTransactionState sendResult;

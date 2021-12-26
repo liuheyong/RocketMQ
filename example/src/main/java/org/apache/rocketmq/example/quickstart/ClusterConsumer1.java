@@ -29,10 +29,10 @@ import java.util.List;
 /**
  * This example shows how to subscribe and consume messages using providing {@link DefaultMQPushConsumer}.
  */
-public class Consumer6 {
+public class ClusterConsumer1 {
 
     public static void main(String[] args) throws MQClientException {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("lhy_consumer_group_name");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("lhy_cluster_consumer_group_name");
         consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         consumer.subscribe("TopicTest", "*");

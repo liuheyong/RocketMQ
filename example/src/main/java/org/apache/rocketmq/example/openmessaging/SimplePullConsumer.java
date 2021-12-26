@@ -61,15 +61,12 @@ public class SimplePullConsumer {
                 System.out.printf("Received one message: %s%n", msgId);
                 consumer.ack(msgId);
 
-                if (!stop) {
-                    stop = msgId.equalsIgnoreCase(sendResult.messageId());
-                }
+                stop = msgId.equalsIgnoreCase(sendResult.messageId());
 
             } else {
                 System.out.printf("Return without any message%n");
             }
         }
-
         consumer.shutdown();
         messagingAccessPoint.shutdown();
     }
