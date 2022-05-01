@@ -32,7 +32,7 @@ import java.util.List;
  * @Author: heyongliu
  * @Date: 2021/8/7
  */
-public class OrderMessageConsumer2_1 {
+public class OrderMessageConsumer2 {
 
     public static void main(String[] args) throws MQClientException {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("lhy_order_message_consumer_group_name");

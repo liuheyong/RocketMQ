@@ -630,9 +630,7 @@ public class MQClientInstance {
                             // Update sub info
                             {
                                 Set<MessageQueue> subscribeInfo = topicRouteData2TopicSubscribeInfo(topic, topicRouteData);
-                                Iterator<Entry<String, MQConsumerInner>> it = this.consumerTable.entrySet().iterator();
-                                while (it.hasNext()) {
-                                    Entry<String, MQConsumerInner> entry = it.next();
+                                for (Entry<String, MQConsumerInner> entry : this.consumerTable.entrySet()) {
                                     MQConsumerInner impl = entry.getValue();
                                     if (impl != null) {
                                         impl.updateTopicSubscribeInfo(topic, subscribeInfo);
@@ -662,7 +660,6 @@ public class MQClientInstance {
         } catch (InterruptedException e) {
             log.warn("updateTopicRouteInfoFromNameServer Exception", e);
         }
-
         return false;
     }
 

@@ -265,6 +265,7 @@ public class DefaultMQPushConsumer extends ClientConfig implements MQPushConsume
 
     /**
      * Interface of asynchronous transfer data
+     * 异步传输数据接口
      */
     private TraceDispatcher traceDispatcher = null;
 

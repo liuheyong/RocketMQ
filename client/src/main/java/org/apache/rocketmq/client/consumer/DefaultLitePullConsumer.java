@@ -37,6 +37,7 @@ public class DefaultLitePullConsumer extends ClientConfig implements LitePullCon
 
     /**
      * Minimum commit offset interval time in milliseconds.
+     * 最小提交偏移间隔时间（以毫秒为单位）
      */
     private static final long MIN_AUTOCOMMIT_INTERVAL_MILLIS = 1000;
     private final DefaultLitePullConsumerImpl defaultLitePullConsumerImpl;
@@ -51,11 +52,13 @@ public class DefaultLitePullConsumer extends ClientConfig implements LitePullCon
     private String consumerGroup;
     /**
      * Long polling mode, the Consumer connection max suspend time, it is not recommended to modify
+     * 长轮询模式，Consumer连接最大挂起时间，不建议修改
      */
     private long brokerSuspendMaxTimeMillis = 1000 * 20;
     /**
      * Long polling mode, the Consumer connection timeout(must greater than brokerSuspendMaxTimeMillis), it is not
      * recommended to modify
+     * 长轮询模式，Consumer连接超时（必须大于brokerSuspendMaxTimeMillis），不建议修改
      */
     private long consumerTimeoutMillisWhenSuspend = 1000 * 30;
     /**
@@ -64,10 +67,12 @@ public class DefaultLitePullConsumer extends ClientConfig implements LitePullCon
     private long consumerPullTimeoutMillis = 1000 * 10;
     /**
      * Consumption pattern,default is clustering
+     * 默认集群消费
      */
     private MessageModel messageModel = MessageModel.CLUSTERING;
     /**
      * Message queue listener
+     * 消息队列监听器
      */
     private MessageQueueListener messageQueueListener;
     /**
@@ -76,14 +81,17 @@ public class DefaultLitePullConsumer extends ClientConfig implements LitePullCon
     private OffsetStore offsetStore;
     /**
      * Queue allocation algorithm
+     * 队列分配算法
      */
     private AllocateMessageQueueStrategy allocateMessageQueueStrategy = new AllocateMessageQueueAveragely();
     /**
      * Whether the unit of subscription group
+     * 是否为订阅组单位
      */
     private boolean unitMode = false;
     /**
      * The flag for auto commit offset
+     * 自动提交偏移量标志
      */
     private boolean autoCommit = true;
     /**

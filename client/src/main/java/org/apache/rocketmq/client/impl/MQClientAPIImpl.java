@@ -605,7 +605,6 @@ public class MQClientAPIImpl {
             final PullCallback pullCallback
     ) throws RemotingException, MQBrokerException, InterruptedException {
         RemotingCommand request = RemotingCommand.createRequestCommand(RequestCode.PULL_MESSAGE, requestHeader);
-
         switch (communicationMode) {
             case ONEWAY:
                 assert false;
@@ -619,7 +618,6 @@ public class MQClientAPIImpl {
                 assert false;
                 break;
         }
-
         return null;
     }
 
