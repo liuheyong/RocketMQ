@@ -42,7 +42,6 @@ public class RemotingUtil {
         if (OS_NAME != null && OS_NAME.toLowerCase().contains("linux")) {
             isLinuxPlatform = true;
         }
-
         if (OS_NAME != null && OS_NAME.toLowerCase().contains("windows")) {
             isWindowsPlatform = true;
         }

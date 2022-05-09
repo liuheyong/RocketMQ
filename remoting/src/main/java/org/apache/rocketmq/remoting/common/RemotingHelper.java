@@ -17,17 +17,18 @@
 package org.apache.rocketmq.remoting.common;
 
 import io.netty.channel.Channel;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
 import org.apache.rocketmq.logging.InternalLogger;
 import org.apache.rocketmq.logging.InternalLoggerFactory;
 import org.apache.rocketmq.remoting.exception.RemotingConnectException;
 import org.apache.rocketmq.remoting.exception.RemotingSendRequestException;
 import org.apache.rocketmq.remoting.exception.RemotingTimeoutException;
 import org.apache.rocketmq.remoting.protocol.RemotingCommand;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 public class RemotingHelper {
     public static final String ROCKETMQ_REMOTING = "RocketmqRemoting";
@@ -36,10 +37,9 @@ public class RemotingHelper {
     private static final InternalLogger log = InternalLoggerFactory.getLogger(ROCKETMQ_REMOTING);
 
     public static String exceptionSimpleDesc(final Throwable e) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (e != null) {
             sb.append(e.toString());
-
             StackTraceElement[] stackTrace = e.getStackTrace();
             if (stackTrace != null && stackTrace.length > 0) {
                 StackTraceElement elment = stackTrace[0];
@@ -47,7 +47,6 @@ public class RemotingHelper {
                 sb.append(elment.toString());
             }
         }
-
         return sb.toString();
     }
 
@@ -55,26 +54,19 @@ public class RemotingHelper {
         int split = addr.lastIndexOf(":");
         String host = addr.substring(0, split);
         String port = addr.substring(split + 1);
-        InetSocketAddress isa = new InetSocketAddress(host, Integer.parseInt(port));
-        return isa;
+        return new InetSocketAddress(host, Integer.parseInt(port));
     }
 
-    public static RemotingCommand invokeSync(final String addr, final RemotingCommand request,
-        final long timeoutMillis) throws InterruptedException, RemotingConnectException,
-        RemotingSendRequestException, RemotingTimeoutException {
+    public static RemotingCommand invokeSync(final String addr, final RemotingCommand request, final long timeoutMillis) throws InterruptedException, RemotingConnectException, RemotingSendRequestException, RemotingTimeoutException {
         long beginTime = System.currentTimeMillis();
         SocketAddress socketAddress = RemotingUtil.string2SocketAddress(addr);
         SocketChannel socketChannel = RemotingUtil.connect(socketAddress);
         if (socketChannel != null) {
             boolean sendRequestOK = false;
-
             try {
-
                 socketChannel.configureBlocking(true);
-
                 //bugfix  http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4614802
                 socketChannel.socket().setSoTimeout((int) timeoutMillis);
-
                 ByteBuffer byteBufferRequest = request.encode();
                 while (byteBufferRequest.hasRemaining()) {
                     int length = socketChannel.write(byteBufferRequest);
@@ -88,12 +80,9 @@ public class RemotingHelper {
                     } else {
                         throw new RemotingSendRequestException(addr);
                     }
-
                     Thread.sleep(1);
                 }
-
                 sendRequestOK = true;
-
                 ByteBuffer byteBufferSize = ByteBuffer.allocate(4);
                 while (byteBufferSize.hasRemaining()) {
                     int length = socketChannel.read(byteBufferSize);
@@ -107,10 +96,8 @@ public class RemotingHelper {
                     } else {
                         throw new RemotingTimeoutException(addr, timeoutMillis);
                     }
-
                     Thread.sleep(1);
                 }
-
                 int size = byteBufferSize.getInt(0);
                 ByteBuffer byteBufferBody = ByteBuffer.allocate(size);
                 while (byteBufferBody.hasRemaining()) {
@@ -125,15 +112,12 @@ public class RemotingHelper {
                     } else {
                         throw new RemotingTimeoutException(addr, timeoutMillis);
                     }
-
                     Thread.sleep(1);
                 }
-
                 byteBufferBody.flip();
                 return RemotingCommand.decode(byteBufferBody);
             } catch (IOException e) {
                 log.error("invokeSync failure", e);
-
                 if (sendRequestOK) {
                     throw new RemotingTimeoutException(addr, timeoutMillis);
                 } else {
@@ -157,7 +141,6 @@ public class RemotingHelper {
         }
         SocketAddress remote = channel.remoteAddress();
         final String addr = remote != null ? remote.toString() : "";
-
         if (addr.length() > 0) {
             int index = addr.lastIndexOf("/");
             if (index >= 0) {
@@ -180,5 +163,4 @@ public class RemotingHelper {
         }
         return "";
     }
-
 }

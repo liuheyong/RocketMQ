@@ -18,12 +18,13 @@ package org.apache.rocketmq.remoting.protocol;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class RocketMQSerializable {
-    private static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");
+    private static final Charset CHARSET_UTF8 = StandardCharsets.UTF_8;
 
     public static byte[] rocketMQProtocolEncode(RemotingCommand cmd) {
         // String remark
@@ -85,10 +86,10 @@ public class RocketMQSerializable {
             Map.Entry<String, String> entry = it.next();
             if (entry.getKey() != null && entry.getValue() != null) {
                 kvLength =
-                    // keySize + Key
-                    2 + entry.getKey().getBytes(CHARSET_UTF8).length
-                        // valSize + val
-                        + 4 + entry.getValue().getBytes(CHARSET_UTF8).length;
+                        // keySize + Key
+                        2 + entry.getKey().getBytes(CHARSET_UTF8).length
+                                // valSize + val
+                                + 4 + entry.getValue().getBytes(CHARSET_UTF8).length;
                 totalLength += kvLength;
             }
         }
@@ -117,18 +118,18 @@ public class RocketMQSerializable {
     private static int calTotalLen(int remark, int ext) {
         // int code(~32767)
         int length = 2
-            // LanguageCode language
-            + 1
-            // int version(~32767)
-            + 2
-            // int opaque
-            + 4
-            // int flag
-            + 4
-            // String remark
-            + 4 + remark
-            // HashMap<String, String> extFields
-            + 4 + ext;
+                // LanguageCode language
+                + 1
+                // int version(~32767)
+                + 2
+                // int opaque
+                + 4
+                // int flag
+                + 4
+                // String remark
+                + 4 + remark
+                // HashMap<String, String> extFields
+                + 4 + ext;
 
         return length;
     }
